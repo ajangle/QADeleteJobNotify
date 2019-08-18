@@ -19,6 +19,7 @@ public class QADeleteNotify {
  
                 public void findFile(String name,File file)
                     {
+                        //This function can be used to pin point a file if needed.
                         File[] list = file.listFiles();
                         if(list!=null)
                         for (File fil : list)
