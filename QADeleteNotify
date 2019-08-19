@@ -26,9 +26,9 @@ public class FileWordSearch
 public static void main(String[] args) throws IOException{
 		
 		//Path to the location of the log file
-		String otcsadm1qa = "\\\\njv-otcsadm1-qa\\Object Importer\\log_files\\";
+		String Container1 = "\\\\ServerName_1\\Directory_1\\log_files\\";
 		
-		//\\\\njv-otcsadm1-qa\\Object Importer\\log_files\\201982_QA_Documents_Cleaning.log
+		//\\\\ServerName_1\\Directory_1\\log_files\\201982_QA_Documents_Cleaning.log
 		
 		 YearMonth current = YearMonth.now();
 		 String today = current.format(DateTimeFormatter.ofPattern("yyyyMM"));
@@ -45,7 +45,7 @@ public static void main(String[] args) throws IOException{
          String todayDate = scan.next();
          scan.close();
          
-         String retrieveLog = otcsadm1qa + today + todayDate + "_QA_Documents_Cleaning.log";
+         String retrieveLog = Container1 + today + todayDate + "_QA_Documents_Cleaning.log";
         // System.out.println("Enter the directory where to search ");
         // String directory = scan.next();
         // ff.findFile(name,new File(directory));
@@ -55,7 +55,7 @@ public static void main(String[] args) throws IOException{
 
 	
    
-      //File f1=new File("\\\\njv-otcsadm1-qa\\\\Object Importer\\\\log_files\\\\201982_QA_Documents_Cleaning.log"); //Creation of File Descriptor for input file
+      //File f1=new File("\\\\ServerName_1\\\\Directory_1\\\\log_files\\\\201982_QA_Documents_Cleaning.log"); //Creation of File Descriptor for input file
       File f1=new File(retrieveLog); //Creation of File Descriptor for input file
       String[] words=null;  //Intialize the word Array
       FileReader fr = new FileReader(f1);  //Creation of File Reader object
