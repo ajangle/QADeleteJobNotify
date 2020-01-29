@@ -1,69 +1,111 @@
-Source Code
- 
-/*QA Delete Job Completion Notification
-* This program will detect the log file created by a
- * deleted production files in QA.
-*
- * 
- * 
- * Created by: James Gilles & Akash Jangle
-* Initial start date: August 13, 2019
-* 
- * */
-import java.io.*;
-import java.util.*;
-import java.time.*;
-import java.time.format.DateTimeFormatter;
- 
-public class QADeleteNotify {
- 
-                public void findFile(String name,File file)
-                    {
-                        //This function can be used to pin point a file if needed.
-                        File[] list = file.listFiles();
-                        if(list!=null)
-                        for (File fil : list)
-                        {
-                            if (fil.isDirectory())
-                            {
-                                findFile(name,fil);
-                            }
-                            else if (name.equalsIgnoreCase(fil.getName()))
-                            {
-                                System.out.println(fil.getParentFile());
-                            }
-                        }
-                    }
-               
-                 
-                public static void main(String[] args) {
-                               
-                                //Path to the location of the log file
-                                String otcsadm1qa = "\\\\njv-otcsadm1-qa\\Object Importer\\log_files\\";
-                               
-                                YearMonth current = YearMonth.now();
-                                String today = current.format(DateTimeFormatter.ofPattern("yyyyMM"));
-                                              
-                                 if(today.charAt(4) == '0') { today = current.format(DateTimeFormatter.ofPattern("yyyyM")); }
-        
-         //System.out.println(today);
-       
-         // -------------------------------All good up to here
-       
-         //FindFile ff = new FindFile();
-         Scanner scan = new Scanner(System.in);
-         System.out.println("Enter today's date: " );
-         String todayDate = scan.next();
-         scan.close();
-        
-         String retrieveLog = otcsadm1qa + today + todayDate + "_QA_Documents_Cleaning.log";
-        // System.out.println("Enter the directory where to search ");
-        // String directory = scan.next();
-        // ff.findFile(name,new File(directory));
-        
-         System.out.println(retrieveLog);
- 
- 
-                }
- 
+//The following connects to a Oracle database and run the query to check for qa delete job 
+//Author: Akash Jangle
+//Created: 08-24-2019
+
+
+import java.sql.*;
+import javax.swing.JOptionPane;
+
+import java.util.concurrent.TimeUnit;
+
+public class QADeleteJobNotify
+
+{
+	    public static <print> void main(String[] args) 
+	    
+	    {
+	    	//Initialize all the variables first needed for calculation
+	    	int container, value1 = 0, value2 = 0, fin = 0, startval = 340528; 
+	    	
+	    	    			
+	    try
+	    {
+	     //The following is a classic               
+	    	Class.forName("oracle.jdbc.driver.OracleDriver");
+	                    
+	    //Establish connection to the database
+	
+	                    String url = "jdbc:oracle:thin:@localhost:12485/dbname";
+                     
+	                    
+	                    Connection con = DriverManager.getConnection(url,"username", "pwd");
+	                                    
+	                    
+	   
+	                    
+	                    if (con != null)
+	                    	JOptionPane.showMessageDialog(null, "Connected Succesfully to the DB", "DB Connection Status", JOptionPane.INFORMATION_MESSAGE);
+	                    else
+	                    	JOptionPane.showMessageDialog(null, "Not Connected", "DB Connection Status", JOptionPane.INFORMATION_MESSAGE);
+	                    
+	                     
+	    
+	                    
+	    //Create a statement object to send to the DB
+	                    
+	                    Statement statement = con.createStatement();
+	                    ResultSet rs;
+	                    
+	            for(int i = 1;i <= 2; ++i)
+	                    {              
+	    //Execute the statement object
+	                    rs = statement.executeQuery("select * from \r\n" + 
+	                                                    "customers d\r\n" + 
+	                                                    "where id  = 144");
+	                    
+	                                              
+							while (rs.next()) {             
+							container = rs.getInt("tc");
+							if(i==1 ) {
+								value1 = container;
+							}
+							else {
+								value2 = container;
+							}
+															
+							TimeUnit.SECONDS.sleep(5);
+							
+							}
+							
+							
+							
+							
+							}
+	            int CountDeleted =  (startval-value2);
+	            //Declared the strings here as they were holding value as 0 otherwise
+	            String msgRunning = "Still Running\n" + "Value 1: " + value1 + "\n" + "Value 2: " + value2;
+	        	String msgError = "Stopped Running\n" + "Value 1: " + value1 + "\n" + "Value 2: " + value2;
+	            
+	        	//Calculate the difference between value1 and value 2
+	        	fin = value1-value2;
+	        	int CountRemaining = (startval - fin);
+	        	
+	            
+				if(fin>0) {
+					
+					JOptionPane.showMessageDialog(null, msgRunning, "Status", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, CountDeleted, "Count Deleted", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, CountRemaining, "Fellas this many more to go", JOptionPane.INFORMATION_MESSAGE);
+					
+				}
+				else {
+					JOptionPane.showMessageDialog(null, msgError, "Status", JOptionPane.INFORMATION_MESSAGE);
+				}
+	                    
+	                   
+	                    con.close();
+	    }
+	    
+	                                                    
+	                    catch(Exception e)
+	    {
+	                    	JOptionPane.showMessageDialog(null, "Not Connected - Credentials expired. Check the source code to enter the updated credentials", "DB Connection Status", JOptionPane.INFORMATION_MESSAGE);            
+	                    	//System.out.println(e);
+	    }
+	
+	    }
 }
+                
+                
+
+
