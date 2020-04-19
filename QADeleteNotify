@@ -1,111 +1,85 @@
 //The following connects to a Oracle database and run the query to check for qa delete job 
 //Author: Akash Jangle
+//Editor: James Gilles
 //Created: 08-24-2019
-
 
 import java.sql.*;
 import javax.swing.JOptionPane;
-
 import java.util.concurrent.TimeUnit;
 
 public class QADeleteJobNotify
-
 {
-	    public static <print> void main(String[] args) 
-	    
-	    {
+	public static <print> void main(String[] args) 
+	{
 	    	//Initialize all the variables first needed for calculation
 	    	int container, value1 = 0, value2 = 0, fin = 0, startval = 340528; 
-	    	
 	    	    			
 	    try
 	    {
-	     //The following is a classic               
+	     	//The following is a classic               
 	    	Class.forName("oracle.jdbc.driver.OracleDriver");
 	                    
-	    //Establish connection to the database
-	
-	                    String url = "jdbc:oracle:thin:@localhost:12485/dbname";
-                     
-	                    
-	                    Connection con = DriverManager.getConnection(url,"username", "pwd");
+	    	//Establish connection to the database
+	        String url = "jdbc:oracle:thin:@localhost:12485/dbname";
+                     	                    
+	        Connection con = DriverManager.getConnection(url,"username", "pwd");
 	                                    
+	        //Connection confirmation	                    
+	        if (con != null) JOptionPane.showMessageDialog(null, "Connected Succesfully to the DB", "DB Connection Status", JOptionPane.INFORMATION_MESSAGE);
+	        
+		else { JOptionPane.showMessageDialog(null, "Not Connected", "DB Connection Status", JOptionPane.INFORMATION_MESSAGE); }
 	                    
-	   
+		                    
+	    	//Create a statement object to send to the DB
+	    	Statement statement = con.createStatement();
+	    	ResultSet rs;
 	                    
-	                    if (con != null)
-	                    	JOptionPane.showMessageDialog(null, "Connected Succesfully to the DB", "DB Connection Status", JOptionPane.INFORMATION_MESSAGE);
-	                    else
-	                    	JOptionPane.showMessageDialog(null, "Not Connected", "DB Connection Status", JOptionPane.INFORMATION_MESSAGE);
-	                    
-	                     
-	    
-	                    
-	    //Create a statement object to send to the DB
-	                    
-	                    Statement statement = con.createStatement();
-	                    ResultSet rs;
-	                    
-	            for(int i = 1;i <= 2; ++i)
-	                    {              
-	    //Execute the statement object
-	                    rs = statement.executeQuery("select * from \r\n" + 
-	                                                    "customers d\r\n" + 
-	                                                    "where id  = 144");
-	                    
-	                                              
-							while (rs.next()) {             
-							container = rs.getInt("tc");
-							if(i==1 ) {
-								value1 = container;
-							}
-							else {
-								value2 = container;
-							}
-															
-							TimeUnit.SECONDS.sleep(5);
-							
-							}
-							
-							
-							
-							
-							}
-	            int CountDeleted =  (startval-value2);
-	            //Declared the strings here as they were holding value as 0 otherwise
-	            String msgRunning = "Still Running\n" + "Value 1: " + value1 + "\n" + "Value 2: " + value2;
-	        	String msgError = "Stopped Running\n" + "Value 1: " + value1 + "\n" + "Value 2: " + value2;
-	            
-	        	//Calculate the difference between value1 and value 2
-	        	fin = value1-value2;
-	        	int CountRemaining = (startval - fin);
+	        for(int i = 1;i <= 2; ++i)
+	        {              
+	       		//Execute the statement object
+	                rs = statement.executeQuery("select * from \r\n" + "customers d\r\n" + "where id  = 144");
+	                    	                                              
+				while (rs.next())
+				{             
+					container = rs.getInt("tc");
+					if(i==1 ) { value1 = container; }
+								
+					else { value2 = container; }
+					
+					TimeUnit.SECONDS.sleep(5);
+			 	}
+		}
+		
+		//Declare and initialize deleted items counter.
+	        int CountDeleted =  (startval-value2);
+		
+	        //Declared the strings here as they were holding value as 0 otherwise
+	        String msgRunning = "Still Running\n" + "Value 1: " + value1 + "\n" + "Value 2: " + value2;
+	        String msgError = "Stopped Running\n" + "Value 1: " + value1 + "\n" + "Value 2: " + value2;
+	           
+	        //Calculate the difference between value1 and value 2
+	        fin = value1-value2;
+	        int CountRemaining = (startval - fin);
 	        	
-	            
-				if(fin>0) {
+	         //Using JOptionPane to display result messages
+		if(fin>0)
+		{
+			JOptionPane.showMessageDialog(null, msgRunning, "Status", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, CountDeleted, "Count Deleted", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, CountRemaining, "Fellas this many more to go", JOptionPane.INFORMATION_MESSAGE);
 					
-					JOptionPane.showMessageDialog(null, msgRunning, "Status", JOptionPane.INFORMATION_MESSAGE);
-					JOptionPane.showMessageDialog(null, CountDeleted, "Count Deleted", JOptionPane.INFORMATION_MESSAGE);
-					JOptionPane.showMessageDialog(null, CountRemaining, "Fellas this many more to go", JOptionPane.INFORMATION_MESSAGE);
-					
-				}
-				else {
-					JOptionPane.showMessageDialog(null, msgError, "Status", JOptionPane.INFORMATION_MESSAGE);
-				}
-	                    
-	                   
-	                    con.close();
+		}
+		
+		else { JOptionPane.showMessageDialog(null, msgError, "Status", JOptionPane.INFORMATION_MESSAGE); }
+	         
+		 //close the DB connection.           
+	        con.close();
+	    }//Close try block
+	    
+	    catch(Exception e)
+	    {
+	    	JOptionPane.showMessageDialog(null, "Not Connected - Credentials expired. Check the source code to enter the updated credentials", "DB Connection Status", JOptionPane.INFORMATION_MESSAGE);            
 	    }
 	    
-	                                                    
-	                    catch(Exception e)
-	    {
-	                    	JOptionPane.showMessageDialog(null, "Not Connected - Credentials expired. Check the source code to enter the updated credentials", "DB Connection Status", JOptionPane.INFORMATION_MESSAGE);            
-	                    	//System.out.println(e);
-	    }
-	
-	    }
-}
-                
-                
-
-
+	}//Close main
+}//close the class
