@@ -1,5 +1,5 @@
 # Application: DeleteJobNotify.jar
----
+
 ## What the application will do.
 * Best used on MySQL or OracleDB. Connection issues may occurr using MicroSoft SSMS
 
