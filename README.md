@@ -9,11 +9,10 @@
 
 3) If there is a difference, the application will then print out the appropriate message. This will act as a notification to ensure that job runs without manual monitoring.
 
----
 ### Creators:
 	Akash Jangle
 	James Gilles
 
-Development environment: Java
+### Development environment: Java
 ---
 Date: August 18, 2019
