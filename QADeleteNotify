@@ -11,8 +11,8 @@ public class QADeleteJobNotify
 {
 	public static <print> void main(String[] args) 
 	{
-	    	//Initialize all the variables first needed for calculation
-	    	int container, value1 = 0, value2 = 0, fin = 0, startval = 340528; 
+	    //Initialize all the variables first needed for calculation
+	    int container, value1 = 0, value2 = 0, fin = 0, startval = 340528; 
 	    	    			
 	    try
 	    {
@@ -25,12 +25,11 @@ public class QADeleteJobNotify
 	        Connection con = DriverManager.getConnection(url,"username", "pwd");
 	                                    
 	        //Connection confirmation	                    
-	        if (con != null) JOptionPane.showMessageDialog(null, "Connected Succesfully to the DB", "DB Connection Status", JOptionPane.INFORMATION_MESSAGE);
+	        if (con != null){ JOptionPane.showMessageDialog(null, "Connected Succesfully to the DB", "DB Connection Status", JOptionPane.INFORMATION_MESSAGE); }
 	        
 		else { JOptionPane.showMessageDialog(null, "Not Connected", "DB Connection Status", JOptionPane.INFORMATION_MESSAGE); }
 	                    
-		                    
-	    	//Create a statement object to send to the DB
+		//Create a statement object to send to the DB
 	    	Statement statement = con.createStatement();
 	    	ResultSet rs;
 	                    
@@ -50,7 +49,7 @@ public class QADeleteJobNotify
 			 	}
 		}
 		
-		//Declare and initialize deleted items counter.
+		//Declare and initialize the deleted items counter.
 	        int CountDeleted =  (startval-value2);
 		
 	        //Declared the strings here as they were holding value as 0 otherwise
@@ -72,8 +71,9 @@ public class QADeleteJobNotify
 		
 		else { JOptionPane.showMessageDialog(null, msgError, "Status", JOptionPane.INFORMATION_MESSAGE); }
 	         
-		 //close the DB connection.           
+		//close the DB connection.           
 	        con.close();
+		
 	    }//Close try block
 	    
 	    catch(Exception e)
